@@ -22,7 +22,7 @@ document.getElementById('quality').addEventListener('input', function() {
         return;
     }
 
-    const quality = (51 - this.value) / 100; // 50→0.01（最悪画質）, 1→0.50（最高画質）
+    const quality = (1001 - this.value) / 100; // 50→0.01（最悪画質）, 1→0.50（最高画質）
     processImage(quality);
 });
 
@@ -44,7 +44,7 @@ function processImage(quality) {
     const ctx = canvas.getContext('2d');
 
     // 画像の最大幅を200pxに制限し、比率を維持
-    const maxWidth = 200;
+    const maxWidth = 300;
     const scale = Math.min(maxWidth / originalImage.width, 1);
 
     canvas.width = originalImage.width * scale;
