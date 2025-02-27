@@ -9,6 +9,8 @@ canvas {
     display: block;
     margin: 10px auto;
     border: 1px solid #ccc;
+    max-width: 90vw; /* 画面幅の90%以内に収める */
+    height: auto;
 }
 
 button {
