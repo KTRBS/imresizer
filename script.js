@@ -1,4 +1,4 @@
-let originalImage = null; // 元画像を保存
+let originalImage = null; // 元画像を保
 
 document.getElementById('upload').addEventListener('change', function(event) {
     const file = event.target.files[0];
