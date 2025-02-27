@@ -6,7 +6,7 @@ document.getElementById('upload').addEventListener('change', function(event) {
     reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
-            processImage(img, 10);
+            processImage(img, 50); // 初期値を50に（高劣化）
         };
         img.src = e.target.result;
     };
@@ -14,7 +14,7 @@ document.getElementById('upload').addEventListener('change', function(event) {
 });
 
 document.getElementById('quality').addEventListener('input', function() {
-    const quality = this.value;
+    const quality = 51 - this.value; // 50が最低画質、1が最高画質に逆転
     const img = new Image();
     img.onload = function() {
         processImage(img, quality);
@@ -34,8 +34,8 @@ function processImage(img, quality) {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
-    // 画像の最大幅を500pxに制限し、比率を維持
-    const maxWidth = 500;
+    // 画像の最大幅を300pxに制限し、比率を維持
+    const maxWidth = 300;
     const scale = Math.min(maxWidth / img.width, 1);
     
     canvas.width = img.width * scale;
