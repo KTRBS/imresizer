@@ -9,8 +9,8 @@ canvas {
     display: block;
     margin: 10px auto;
     border: 1px solid #ccc;
-    max-width: 100%; /* 画面幅に合わせる */
-    width: 150px; /* 最大幅を150pxに縮小 */
+    max-width: 100%;
+    width: 200px; /* 画像サイズを200pxに拡大 */
     height: auto;
 }
 
@@ -26,4 +26,8 @@ button {
 
 button:hover {
     background-color: #005f73;
+}
+
+#quality-label {
+    display: none; /* Quality Lvlを非表示 */
 }
