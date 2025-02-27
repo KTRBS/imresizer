@@ -6,7 +6,7 @@ document.getElementById('upload').addEventListener('change', function(event) {
     reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
-            processImage(img, 50); // 初期値を50に（高劣化）
+            processImage(img, 50); // 初期値を最大劣化
         };
         img.src = e.target.result;
     };
@@ -14,7 +14,7 @@ document.getElementById('upload').addEventListener('change', function(event) {
 });
 
 document.getElementById('quality').addEventListener('input', function() {
-    const quality = 51 - this.value; // 50が最低画質、1が最高画質に逆転
+    const quality = 51 - this.value; // 50→1（最悪画質）, 1→50（最高画質）
     const img = new Image();
     img.onload = function() {
         processImage(img, quality);
@@ -43,7 +43,7 @@ function processImage(img, quality) {
 
     // 画像をキャンバスに描画し、JPEGに圧縮
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    const compressedData = canvas.toDataURL('image/jpeg', quality / 50);
+    const compressedData = canvas.toDataURL('image/jpeg', quality / 100); // 修正: 圧縮率を適切に変更
 
     // 劣化した画像を再読み込み
     const degradedImg = new Image();
