@@ -34,19 +34,22 @@ function processImage(img, quality) {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
-    // キャンバスサイズを画像サイズに設定
-    canvas.width = img.width;
-    canvas.height = img.height;
+    // 画像の最大幅を500pxに制限し、比率を維持
+    const maxWidth = 500;
+    const scale = Math.min(maxWidth / img.width, 1);
+    
+    canvas.width = img.width * scale;
+    canvas.height = img.height * scale;
 
     // 画像をキャンバスに描画し、JPEGに圧縮
-    ctx.drawImage(img, 0, 0, img.width, img.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     const compressedData = canvas.toDataURL('image/jpeg', quality / 50);
 
     // 劣化した画像を再読み込み
     const degradedImg = new Image();
     degradedImg.onload = function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(degradedImg, 0, 0);
+        ctx.drawImage(degradedImg, 0, 0, canvas.width, canvas.height);
     };
     degradedImg.src = compressedData;
 }
