@@ -10,7 +10,7 @@ canvas {
     margin: 10px auto;
     border: 1px solid #ccc;
     max-width: 100%;
-    width: 200px;
+    width: 200px; /* 画像サイズを200pxに拡大 */
     height: auto;
 }
 
@@ -29,24 +29,5 @@ button:hover {
 }
 
 #quality-label {
-    display: none;
-}
-
-#quality-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-
-#quality {
-    width: 300px; /* シークバーの幅を広げる */
-    margin-right: 10px;
-}
-
-#quality-input {
-    width: 120px;
-    text-align: center;
-    font-size: 16px;
-    padding: 5px;
+    display: none; /* Quality Lvlを非表示 */
 }
