@@ -9,7 +9,7 @@ document.getElementById('upload').addEventListener('change', function(event) {
         originalImage = new Image();
         originalImage.crossOrigin = "anonymous"; // CORS回避
         originalImage.onload = function() {
-            processImage(50); // 初期値を最大劣化
+            processImage(0.50); // 初期値を最大劣化 (0.50)
         };
         originalImage.src = e.target.result;
     };
@@ -22,8 +22,19 @@ document.getElementById('quality').addEventListener('input', function() {
         return;
     }
 
-    const quality = (1001 - this.value) / 100; // 50→0.01（最悪画質）, 1→0.50（最高画質）
+    const quality = (51 - this.value) / 100; // 50→0.01（最悪画質）, 1→0.50（最高画質）
+    document.getElementById('quality-input').value = (51 - this.value) / 100; // シークバーと入力を同期
     processImage(quality);
+});
+
+document.getElementById('quality-input').addEventListener('input', function() {
+    const value = parseFloat(this.value); // 小数を処理
+    if (value >= 0.01 && value <= 0.50) {
+        document.getElementById('quality').value = 51 - (value * 100); // 入力値とシークバーを同期
+        processImage(value);
+    } else {
+        this.value = ''; // 範囲外の入力を消去
+    }
 });
 
 document.getElementById('download').addEventListener('click', function() {
@@ -44,7 +55,7 @@ function processImage(quality) {
     const ctx = canvas.getContext('2d');
 
     // 画像の最大幅を200pxに制限し、比率を維持
-    const maxWidth = 300;
+    const maxWidth = 200;
     const scale = Math.min(maxWidth / originalImage.width, 1);
 
     canvas.width = originalImage.width * scale;
