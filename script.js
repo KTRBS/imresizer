@@ -34,8 +34,8 @@ function processImage(img, quality) {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
-    // 画像の最大幅を300pxに制限し、比率を維持
-    const maxWidth = 300;
+    // 画像の最大幅を150pxに制限し、比率を維持
+    const maxWidth = 150;
     const scale = Math.min(maxWidth / img.width, 1);
     
     canvas.width = img.width * scale;
