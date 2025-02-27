@@ -10,7 +10,7 @@ canvas {
     margin: 10px auto;
     border: 1px solid #ccc;
     max-width: 100%;
-    width: 200px; /* 画像サイズを200pxに拡大 */
+    width: 300px; /* 画像サイズを200pxに拡大 */
     height: auto;
 }
 
