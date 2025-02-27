@@ -16,10 +16,10 @@ document.getElementById('upload').addEventListener('change', function(event) {
 });
 
 document.getElementById('quality').addEventListener('input', function() {
-    const quality = 51 - this.value; // 50→1（最悪画質）, 1→50（最高画質）
-    if (originalImage) {
-        processImage(quality);
-    }
+    if (!originalImage) return;
+
+    const quality = (51 - this.value) / 100; // 50→0.01（最悪画質）, 1→0.50（最高画質）
+    processImage(quality);
 });
 
 document.getElementById('download').addEventListener('click', function() {
@@ -36,16 +36,16 @@ function processImage(quality) {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
-    // 画像の最大幅を150pxに制限し、比率を維持
-    const maxWidth = 150;
+    // 画像の最大幅を200pxに制限し、比率を維持
+    const maxWidth = 200;
     const scale = Math.min(maxWidth / originalImage.width, 1);
     
     canvas.width = originalImage.width * scale;
     canvas.height = originalImage.height * scale;
 
-    // 元画像を使って再圧縮する
+    // 毎回元画像から圧縮処理
     ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
-    const compressedData = canvas.toDataURL('image/jpeg', quality / 100);
+    const compressedData = canvas.toDataURL('image/jpeg', quality);
 
     // 劣化した画像をキャンバスに再描画
     const degradedImg = new Image();
