@@ -1,4 +1,4 @@
-let originalImage = null; // 元画像を保存
+let originalImage = null;
 
 document.getElementById('upload').addEventListener('change', function(event) {
     const file = event.target.files[0];
@@ -7,9 +7,9 @@ document.getElementById('upload').addEventListener('change', function(event) {
     const reader = new FileReader();
     reader.onload = function(e) {
         originalImage = new Image();
-        originalImage.crossOrigin = "anonymous"; // CORS回避
+        originalImage.crossOrigin = "anonymous";
         originalImage.onload = function() {
-            processImage(50); // 初期値を最大劣化
+            drawOriginalImage();
         };
         originalImage.src = e.target.result;
     };
@@ -17,47 +17,56 @@ document.getElementById('upload').addEventListener('change', function(event) {
 });
 
 document.getElementById('quality').addEventListener('input', function() {
-    if (!originalImage) {
-        console.error("エラー: 画像がロードされていません");
-        return;
-    }
-
-    const quality = (1001 - this.value) / 100; // 50→0.01（最悪画質）, 1→0.50（最高画質）
+    const quality = this.value / 100; // 100 → 1.00, 1 → 0.01
+    document.getElementById('quality-input').value = quality.toFixed(2);
     processImage(quality);
+});
+
+document.getElementById('quality-input').addEventListener('input', function() {
+    let value = parseFloat(this.value);
+    if (isNaN(value) || value < 0.01 || value > 1.00) return;
+    document.getElementById('quality').value = (value * 100).toFixed(0);
+    processImage(value);
 });
 
 document.getElementById('download').addEventListener('click', function() {
     const canvas = document.getElementById('canvas');
     const link = document.createElement('a');
-    link.download = 'kapikapi.png';
+    link.download = 'compressed.png';
     link.href = canvas.toDataURL();
     link.click();
 });
 
-function processImage(quality) {
-    if (!originalImage) {
-        console.error("エラー: 画像がロードされていません");
-        return;
-    }
+function drawOriginalImage() {
+    if (!originalImage) return;
 
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
-    // 画像の最大幅を200pxに制限し、比率を維持
-    const maxWidth = 300;
+    const maxWidth = 200;
     const scale = Math.min(maxWidth / originalImage.width, 1);
 
     canvas.width = originalImage.width * scale;
     canvas.height = originalImage.height * scale;
 
-    // 毎回元画像から圧縮処理
+    ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+}
+
+function processImage(quality) {
+    if (!originalImage) return;
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const maxWidth = 200;
+    const scale = Math.min(maxWidth / originalImage.width, 1);
+
+    canvas.width = originalImage.width * scale;
+    canvas.height = originalImage.height * scale;
+
     ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
     const compressedData = canvas.toDataURL('image/jpeg', quality);
 
-    // 圧縮後のデータURLを確認（デバッグ用）
-    console.log("圧縮後のデータURL:", compressedData);
-
-    // 劣化した画像をキャンバスに再描画
     const degradedImg = new Image();
     degradedImg.onload = function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
